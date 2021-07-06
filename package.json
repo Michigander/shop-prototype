@@ -1,0 +1,18 @@
+{
+  "name": "citybloomers",
+  "version": "0.0.1",
+  "description": "e-commerce site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "snowpack": "^3.7.1",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "lit-html": "^1.4.1"
+  }
+}
