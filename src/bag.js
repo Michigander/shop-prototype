@@ -1,6 +1,7 @@
 import { html, render } from "lit-html";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
 import { subscribeToCart, clearCart, subscribeToProduct } from "./cart.js";
+import { productWithCartQuery } from "./products.js";
 
 const rootElementId = "bag-items-root";
 
@@ -24,8 +25,11 @@ async function* Bag() {
 }
 
 async function* BagItem({ productId }) {
-  for await (const cartInfo of subscribeToProduct(productId)) {
-    yield html`<span>${cartInfo.numberInCart} x ${productId}</span>`;
+  for await (const msg of productWithCartQuery(productId)) {
+    if (!msg.cart) {
+      continue;
+    }
+    yield html`<span>${msg.cart.numberInCart} x ${productId}</span>`;
   }
 }
 

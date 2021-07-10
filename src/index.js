@@ -1,37 +1,36 @@
 import { html, render } from "lit-html";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
-import { mockStock } from "./stock";
-import { addProductToCart, subscribeToProduct } from "./cart";
+import { addProductToCart } from "./cart";
+import { productIdsQuery } from "./products";
+import { productWithCartQuery } from "./products.js";
 
 const rootElementId = "product-cards-root";
 
 /**
  * PRODUCT CARD
  */
-
-async function* productQuery(productId) {
-  const product = mockStock.find(({ name }) => name === productId);
-  for await (const cart of subscribeToProduct(productId)) {
-    yield { product, cart };
-  }
-}
-
 async function* createProductCard(productId) {
-  for await (const productSnapshot of productQuery(productId)) {
+  for await (const productSnapshot of productWithCartQuery(productId)) {
+    console.log(`[card] : ${JSON.stringify(productSnapshot)}`);
     yield productCard(productSnapshot);
   }
 }
 
 function productCard({ product, cart }) {
+  if (!product || !cart) {
+    console.log(`[productcard] invalid data`);
+    return;
+  }
+
   return html`
     <div class="product-card">
-      <img src=${product.src} />
-      <span class="product-card-name">${product.name}</span>
+      <img src=${product?.src} />
+      <span class="product-card-name">${product?.name}</span>
       <button
         class="product-card-add-button"
-        @click=${() => addProductToCart(product.name)}
+        @click=${() => addProductToCart(product?.name)}
       >
-        add it (${cart.numberInCart})
+        add it (${cart?.numberInCart})
       </button>
     </div>
   `;
@@ -40,11 +39,6 @@ function productCard({ product, cart }) {
 /**
  * PRODUCT CARDS
  */
-
-async function* productIdsQuery() {
-  yield mockStock.map(({ name }) => name);
-}
-
 async function* createProductCards() {
   for await (const productIds of productIdsQuery()) {
     yield productCards({ productIds });
