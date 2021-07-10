@@ -1,6 +1,6 @@
 import { html, render } from "lit-html";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
-import { subscribeToCart, clearCart } from "./cart.js";
+import { subscribeToCart, clearCart, subscribeToProduct } from "./cart.js";
 
 const rootElementId = "bag-items-root";
 
@@ -24,7 +24,9 @@ async function* Bag() {
 }
 
 async function* BagItem({ productId }) {
-  yield productId;
+  for await (const cartInfo of subscribeToProduct(productId)) {
+    yield html`<span>${cartInfo.numberInCart} x ${productId}</span>`;
+  }
 }
 
 render(asyncReplace(Bag()), document.getElementById(rootElementId));
