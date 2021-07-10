@@ -1,8 +1,9 @@
 import { html, render } from "lit-html";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
-const rootElementId = "product-cards-root";
 import { mockStock } from "./stock";
 import { addProductToCart, subscribeToProduct } from "./cart";
+
+const rootElementId = "product-cards-root";
 
 /**
  * PRODUCT CARD
