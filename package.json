@@ -4,7 +4,9 @@
   "description": "e-commerce site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install:lib": "git clone 'https://github.com/Michigander/generac.git' ./lib/generac",
+    "start": "snowpack dev",
+    "build": "snowpack build"
   },
   "author": "",
   "license": "ISC",
